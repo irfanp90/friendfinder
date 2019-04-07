@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/irfanp90/friendfinder/issues"
   },
-  "homepage": "https://github.com/irfanp90/friendfinder#readme"
+  "homepage": "https://github.com/irfanp90/friendfinder#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
 }
