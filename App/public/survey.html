@@ -13,6 +13,7 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     />
+    <script src="https://code.jquery.com/jquery.js"></script>
   </head>
   <body>
     <div class="container">
@@ -26,22 +27,12 @@
         <form>
           <h3><strong>About You</strong></h3>
           <div class="form-group">
-            <label for="formGroupExampleInput">Name (Required)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="formGroupExampleInput"
-            />
+            <label for="name">Name (Required)</label>
+            <input type="text" class="form-control" id="name" />
           </div>
           <div class="form-group">
-            <label for="formGroupExampleInput2"
-              >Link to Photo image (Required)</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="formGroupExampleInput2"
-            />
+            <label for="photo">Link to Photo image (Required)</label>
+            <input type="text" class="form-control" id="photo" />
           </div>
         </form>
         <hr />
@@ -101,7 +92,7 @@
         </select>
         <hr />
         <h3><strong>Question 6</strong></h3>
-        <h4>Music puts a smile on your face></h4>
+        <h4>Music puts a smile on your face?</h4>
         <select data-placeholder="" class="chosen-select" id="question 6">
           <option value=""></option>
           <option value="1">1 (Strongly Disagree)</option>
@@ -156,22 +147,77 @@
         </select>
         <hr />
         <div class="text-center">
-          <a href="/tables"
-            ><button class="btn btn-lg btn-primary">
-              <span class="fa fa-check-square-o"> Submit</span>
-            </button></a
-          >
+          <button class="btn btn-lg btn-primary">
+            <span class="fa fa-check-square-o" id="submit"> Submit</span>
+          </button>
         </div>
       </div>
 
       <footer class="footer">
         <div class="container">
           <p>
-            <a href="/api/tables">API Friends Link</a> |
-            <a href="/api/waitlist">Github Repo</a>
+            <a href="/api/friends">API Friends Link</a> |
+            <a href="https://github.com/irfanp90/friendfinder">Github Repo</a>
           </p>
         </div>
       </footer>
+      <script>
+        // Capture the form inputs
+        $("#submit").on("click", function(event) {
+          event.preventDefault();
+
+          // Form validation
+          function validateForm() {
+            var isValid = true;
+            $(".form-control").each(function() {
+              if ($(this).val() === "") {
+                isValid = false;
+              }
+            });
+
+            $(".chosen-select").each(function() {
+              if ($(this).val() === "") {
+                isValid = false;
+              }
+            });
+            return isValid;
+          }
+
+          // If all required fields are filled
+          if (validateForm()) {
+            // Create an object for the user"s data
+            var userData = {
+              name: $("#name").val(),
+              photo: $("#photo").val(),
+              scores: [
+                $("#question1").val(),
+                $("#question2").val(),
+                $("#question3").val(),
+                $("#question4").val(),
+                $("#question5").val(),
+                $("#question6").val(),
+                $("#question7").val(),
+                $("#question8").val(),
+                $("#question9").val(),
+                $("#question10").val()
+              ]
+            };
+
+            // AJAX post the data to the friends API.
+            $.post("/api/friends", userData, function(data) {
+              // // Grab the result from the AJAX post so that the best match's name and photo are displayed.
+              // $("#match-name").text(data.name);
+              // $("#match-img").attr("src", data.photo);
+
+              // // Show the modal with the best match
+              // $("#results-modal").modal("toggle");
+              alert("working");
+            });
+          } else {
+            alert("Please fill out all fields before submitting!");
+          }
+        });
+      </script>
     </div>
   </body>
 </html>
