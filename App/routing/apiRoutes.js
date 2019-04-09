@@ -16,36 +16,38 @@ connection.connect(function(err) {
   }
   console.log("connected as id " + connection.threadId);
 });
+var friends;
+function loadProfiles() {
+  connection.query("SELECT * FROM profiles", function(err, result) {
+    if (err) throw err;
 
+    friends = result;
+    // response.json(friends);
+  });
+}
+console.log(friends);
 module.exports = function(app) {
   app.get("/api/friends", function(req, res) {
     // Selects all of the data from the MySQL profiles table
-    loadProfiles(res);
+    loadProfiles();
   });
   app.post("/api/friends", function(req, res) {
-    findMatch();
+    // console.log(req.body);
+    findMatch(req.body, friends);
   });
 };
 
-function loadProfiles(response) {
-  connection.query("SELECT * FROM profiles", function(err, result) {
-    if (err) throw err;
-    friends = result;
-    return response.json(friends);
-  });
-}
-function findMatch() {
+function findMatch(userData, friends) {
+  console.log(userData);
+  console.log(friends);
   var bestMatch = {
     name: "",
     photo: "url",
     friendDifference: 1000
   };
-  console.log(req.body);
 
-  var userData = req.body;
   var userScores = userData.scores;
   console.log(userScores);
-  var totalDifference = 0;
 
   for (var i = 0; i < friends.length; i++) {
     console.log(friends[i]);
@@ -55,13 +57,9 @@ function findMatch() {
         parseInt(userScores[j]) - parseInt(friends[i].score[j])
       );
       if (totalDifference <= bestMatch.friendDifference) {
-        bestMatch.name = friends[i].name;
-        bestMatch.photo = friends[i].photo;
-        bestMatch.friendDifference = totalDifference;
+        bestMatch = currentFriend;
+        console.log(bestMatch);
       }
     }
-    friends.push(userData);
-    res.json(bestMatch);
-    console.log(bestMatch);
   }
 }
