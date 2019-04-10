@@ -24,7 +24,7 @@ connection.connect(function(err) {
 module.exports = function(app) {
   app.get("/api/friends", function(req, res) {
     // Selects all of the data from the MySQL profiles table
-    loadProfiles();
+    loadProfiles(res);
   });
   app.post("/api/friends", function(req, res) {
     // console.log(req.body);
@@ -32,12 +32,12 @@ module.exports = function(app) {
   });
 };
 var friends;
-function loadProfiles() {
+function loadProfiles(response) {
   connection.query("SELECT * FROM profiles", function(err, result) {
     if (err) throw err;
 
     friends = result;
-    // response.json(friends);
+    response.json(friends);
   });
   console.log(friends);
 }
