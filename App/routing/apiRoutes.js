@@ -1,4 +1,4 @@
-var mysql = require("mysql");
+var mysql = require("./node_modules/mysql");
 //THIS IS JUST LOCAL CONNECTION. NEED TO FOLLOW HEROKU/MY SQL INTERFACE
 var connection;
 if (process.env.JAWSDB_URL) {
