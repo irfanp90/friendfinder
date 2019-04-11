@@ -46,26 +46,52 @@ function findMatch(userData, friends) {
   console.log(userData);
   console.log(friends);
 
-  // var bestMatch = {
-  //   name: "",
-  //   photo: "url",
-  //   friendDifference: 1000
-  // };
+  module.exports = function(app) {
+    app.get("/api/friends", function(req, res) {
+      // Selects all of the data from the MySQL profiles table
+      loadProfiles(res);
+    });
+    app.post("/api/friends", function(req, res) {
+      // console.log(req.body);
+      findMatch(req.body, friends);
+    });
+  };
+  var friends;
+  function loadProfiles(response) {
+    connection.query("SELECT * FROM profiles", function(err, result) {
+      if (err) throw err;
 
-  // var userScores = userData.scores;
-  // console.log(userScores);
+      friends = result;
+      response.json(friends);
+    });
+    console.log(friends);
+  }
 
-  // for (var i = 0; i < friends.length; i++) {
-  //   console.log(friends[i]);
-  //   totalDifference = 0;
-  //   for (var j = 0; j < friends[i].scores[j]; j++) {
-  //     totalDifference += Math.abs(
-  //       parseInt(userScores[j]) - parseInt(friends[i].score[j])
-  //     );
-  //     if (totalDifference <= bestMatch.friendDifference) {
-  //       bestMatch = currentFriend;
-  //       console.log(bestMatch);
-  //     }
-  //   }
-  // }
+  function findMatch(userData, friends) {
+    console.log(userData);
+    console.log(friends);
+
+    // var bestMatch = {
+    //   name: "",
+    //   photo: "url",
+    //   friendDifference: 1000
+    // };
+
+    // var userScores = userData.scores;
+    // console.log(userScores);
+
+    // for (var i = 0; i < friends.length; i++) {
+    //   console.log(friends[i]);
+    //   totalDifference = 0;
+    //   for (var j = 0; j < friends[i].scores[j]; j++) {
+    //     totalDifference += Math.abs(
+    //       parseInt(userScores[j]) - parseInt(friends[i].score[j])
+    //     );
+    //     if (totalDifference <= bestMatch.friendDifference) {
+    //       bestMatch = currentFriend;
+    //       console.log(bestMatch);
+    //     }
+    //   }
+    // }
+  }
 }
